@@ -1,17 +1,17 @@
-Backend
 Backend service is responsible for adding the given values to database. Backend service is written in NodeJS, Hence we need to install NodeJS.
+In a different project, backend may be written in java, python etc, if so, then we need to install respective softwares. 
 
 **Developer has chosen NodeJs, Check with developer which version of NodeJS is needed. Developer has set a context that it can work with NodeJS >20**
 
-Install NodeJS, By default NodeJS 16 is available, We would like to enable 20 version and install this.
+Install NodeJS. By default NodeJS 16 is available, We would like to enable 20 version and install this.
 
 **You can list modules by using dnf module list**
 
 ```
-dnf module disable nodejs -y
+dnf module disable nodejs -y(This will disable whatever version of nodeJS is there by default)
 ```
 ```
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y(Now we enabled version 20)
 ```
 
 ```
@@ -73,7 +73,7 @@ Description = Backend Service
 
 [Service]
 User=expense
-Environment=DB_HOST="<MYSQL-SERVER-IPADDRESS>"
+Environment=DB_HOST="<MYSQL-SERVER-PRIVATE-IPADDRESS>"(We use private IP vs public because, backend will only talk wth DB internally, so it's good to use Pri.IP so it can talk to DB quicly)
 ExecStart=/bin/node /app/index.js
 SyslogIdentifier=backend
 
@@ -81,7 +81,7 @@ SyslogIdentifier=backend
 WantedBy=multi-user.target
 ```
 
-**NOTE: Ensure you replace <MYSQL-SERVER-IPADDRESS> with IP address**
+**NOTE: Ensure you replace <MYSQL-SERVER-PUBLIC-IPADDRESS> with db private IP address**
 
 Load the service.
 
@@ -110,7 +110,7 @@ dnf install mysql -y
 Load Schema
 
 ```
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
+mysql -h <MYSQL(db)-SERVER-PRIVATE-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
 ```
 
 Restart the service.
